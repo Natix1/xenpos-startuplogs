@@ -85,6 +85,8 @@ func makeRequest(method string, url string, body []byte) (*http.Response, error)
 	return resp, nil
 }
 
+// TODO https://create.roblox.com/docs/cloud/reference/Universe
+
 func getUniverseId(placeId int) (int, error) {
 	url := fmt.Sprintf("https://apis.roblox.com/universes/v1/places/%d/universe", placeId)
 	resp, err := makeRequest("GET", url, []byte(""))
@@ -165,6 +167,7 @@ func main() {
 			}
 
 			payload := map[string]any{
+				"content": "@everyone",
 				"embeds": []map[string]any{
 					{
 						"title":     "New game!",
