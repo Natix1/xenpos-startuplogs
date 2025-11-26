@@ -205,7 +205,11 @@ func main() {
 				"universe id", universeId,
 			)
 
-			REDIS.Set(context.Background(), redisKey, 1, time.Hour*24*365)
+			if err := REDIS.Set(context.Background(), redisKey, 1, time.Hour*24*365).Err(); err != nil {
+				slog.Error("failed to write redis key", "err", err, "key", redisKey)
+				httpError(w, http.StatusInternalServerError, "failed to write redis")
+				return
+			}
 			w.Write([]byte("Recorded"))
 		}
 	})
