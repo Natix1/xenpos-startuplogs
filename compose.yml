@@ -5,6 +5,7 @@ services:
       - "7791:8080"
     env_file:
       - ".env"
+    restart: unless-stopped
   redis:
     image: redis:alpine3.22
     container_name: redis
