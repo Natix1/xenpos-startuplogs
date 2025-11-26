@@ -89,4 +89,6 @@ func main() {
 
 		w.Write([]byte("Recorded"))
 	})
+
+	http.ListenAndServe(":8080", nil)
 }
