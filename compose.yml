@@ -2,6 +2,18 @@ services:
   api:
     build: .
     ports:
-      - "7791:8080"
+      - "8080:8080"
     env_file:
       - ".env"
+  redis:
+    image: redis:alpine3.22
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped
+
+volumes:
+  redis-data:
