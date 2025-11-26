@@ -8,33 +8,31 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
+	discordwebhook "github.com/bensch777/discord-webhook-golang"
 	"github.com/joho/godotenv"
 )
 
 type StartupLog struct {
-	IsStudio            bool `json:"is_studio"`
-	StudioFirstPlayerId int  `json:"studio_first_player_id"`
-	UniverseId          int  `json:"universe_id"`
-	PlaceId             int  `json:"place_id"`
+	IsStudio      bool `json:"is_studio"`
+	FirstPlayerId int  `json:"first_player_id"`
+	UniverseId    int  `json:"universe_id"`
+	PlaceId       int  `json:"place_id"`
+	CreatorId     int  `json:"creator_id"`
+	CreatorType   int  `json:"creator_type"`
 }
 
 var (
-	HOSTNAME        string
 	DISCORD_WEBHOOK string
 )
 
 func init() {
 	godotenv.Load()
 
-	HOSTNAME = os.Getenv("HOSTNAME")
-	if HOSTNAME == "" {
-		panic("HOSTNAME not defined")
-	}
-
 	DISCORD_WEBHOOK = os.Getenv("DISCORD_WEBHOOK")
 	if DISCORD_WEBHOOK == "" {
-
+		panic("DISCORD_WEBHOOK not specified")
 	}
 }
 
@@ -87,6 +85,54 @@ func main() {
 			return
 		}
 
+		slog.Info("Recorded game",
+			"studio", request.IsStudio,
+			"first player id", request.FirstPlayerId,
+			"universe id", request.UniverseId,
+			"place id", request.PlaceId,
+			"creator id", request.CreatorId,
+			"creator type", request.CreatorType,
+		)
+
+		embed := discordwebhook.Embed{
+			Title:     "New game!",
+			Color:     15277667,
+			Timestamp: time.Now(),
+			Fields: []discordwebhook.Field{
+				{
+					Name:   "Is studio",
+					Value:  strconv.FormatBool(request.IsStudio),
+					Inline: true,
+				},
+				{
+					Name:   "First player id",
+					Value:  strconv.Itoa(request.FirstPlayerId),
+					Inline: true,
+				},
+				{
+					Name:   "Universe id",
+					Value:  strconv.Itoa(request.UniverseId),
+					Inline: true,
+				},
+				{
+					Name:   "Place id",
+					Value:  strconv.Itoa(request.PlaceId),
+					Inline: true,
+				},
+				{
+					Name:   "Creator id",
+					Value:  strconv.Itoa(request.CreatorId),
+					Inline: true,
+				},
+				{
+					Name:   "Creator type",
+					Value:  strconv.Itoa(request.CreatorType),
+					Inline: true,
+				},
+			},
+		}
+
+		discordwebhook.SendEmbed(DISCORD_WEBHOOK, embed)
 		w.Write([]byte("Recorded"))
 	})
 
