@@ -125,10 +125,17 @@ func startupLogHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	content := fmt.Sprintf("# %s \n-# @everyone \nIn studio: **%s** \nFirst player user ID: **%d** \nPlace ID: **%d** \nUniverse ID: **%d** \n-# %s",
+	user, err := roblox.GetUser(request.FirstPlayerId)
+	if err != nil {
+		httpError(w, http.StatusInternalServerError, "Failed getting user data"+err.Error())
+		return
+	}
+
+	content := fmt.Sprintf("# New place ID used in universe '%s' \n-# @everyone \nIn studio: **%s** \nFirst player: **%s (%s)** \nPlace ID: **%d** \nUniverse ID: **%d** \n-# %s",
 		universe.DisplayName,
 		isStudioStr,
-		request.FirstPlayerId,
+		user.Name,
+		user.ID,
 		robloxPlaceId,
 		universeId,
 		time.Now().Format(time.RFC3339),
