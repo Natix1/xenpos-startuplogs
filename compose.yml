@@ -17,6 +17,7 @@ services:
       - "traefik.http.services.xenpos-startuplogs.loadbalancer.server.port=8080"
 
       - "traefik.http.middlewares.xenpos-startuplogs-ratelimit.ratelimit.average=1"
+      - "traefik.http.middlewares.xenpos-startuplogs-ratelimit.ratelimit.period=60s"
       - "traefik.http.middlewares.xenpos-startuplogs-ratelimit.ratelimit.burst=1"
 
       - "traefik.http.routers.xenpos-startuplogs.middlewares=xenpos-startuplogs-ratelimit@docker"
