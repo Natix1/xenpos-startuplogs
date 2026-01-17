@@ -12,9 +12,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.xenpos-startuplogs.rule=Host(`xenera.natix.dev`)"
       - "traefik.http.routers.xenpos-startuplogs.entrypoints=websecure"
-      - "traefik.http.routers.xenpos-startuplogs.tls=true"
       - "traefik.http.routers.xenpos-startuplogs.tls.certresolver=le"
-      - "traefik.http.routers.xenpos-startuplogs.loadbalancer.server.port=8080"
+      - "traefik.http.services.xenpos-startuplogs.loadbalancer.server.port=8080"
 
       - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.average=1"
       - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.burst=1"
