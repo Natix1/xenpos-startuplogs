@@ -176,6 +176,8 @@ func startupLogHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	slog.Info("api starting")
+
 	http.HandleFunc("/pos/startup-log", startupLogHandler)
 	http.ListenAndServe(":8080", nil)
 }
