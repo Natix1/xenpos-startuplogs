@@ -15,10 +15,6 @@ services:
       - "traefik.http.routers.xenpos-startuplogs.tls.certresolver=le"
       - "traefik.http.services.xenpos-startuplogs.loadbalancer.server.port=8080"
 
-      - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.average=1"
-      - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.burst=1"
-      - "traefik.http.routers.xenpos-startuplogs.middlewares=ratelimit-xenpos-startuplogs"
-
   redis:
     image: redis
     container_name: redis
