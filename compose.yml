@@ -6,7 +6,7 @@ services:
       - internal
 
     env_file:
-      - ".env"
+      - "stack.env"
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
