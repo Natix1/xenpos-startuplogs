@@ -1,18 +1,41 @@
 services:
   api:
     build: .
-    ports:
-      - "7791:8080"
+    networks:
+      - proxy
+      - internal
+
     env_file:
       - ".env"
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.xenpos-startuplogs.rule=Host(`xenera.natix.dev`)"
+      - "traefik.http.routers.xenpos-startuplogs.entrypoints=websecure"
+      - "traefik.http.routers.xenpos-startuplogs.tls.certresolver=le"
+      - "traefik.http.routers.xenpos-startuplogs.loadbalancer.server.port=8080"
+
+      - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.average=1"
+      - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.burst=1"
+      - "traefik.http.routers.xenpos-startuplogs.middlewares=ratelimit-xenpos-startuplogs"
+
+
+
   redis:
-    image: redis:alpine3.22
+    image: redis
     container_name: redis
     volumes:
       - redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
+    networks:
+      - internal
 
 volumes:
   redis-data:
+
+networks:
+  proxy:
+    external: true
+  internal:
+    driver: bridge
