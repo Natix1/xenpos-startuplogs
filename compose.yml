@@ -18,6 +18,7 @@ services:
 
       - "traefik.http.middlewares.xenpos-startuplogs-ratelimit.ratelimit.average=1"
       - "traefik.http.middlewares.xenpos-startuplogs-ratelimit.ratelimit.period=60s"
+      - "traefik.http.routers.xenpos-startuplogs.middlewares=xenpos-startuplogs.ratelimit"
 
   redis:
     image: redis
