@@ -19,8 +19,6 @@ services:
       - "traefik.http.middlewares.ratelimit-xenpos-startuplogs.ratelimit.burst=1"
       - "traefik.http.routers.xenpos-startuplogs.middlewares=ratelimit-xenpos-startuplogs"
 
-
-
   redis:
     image: redis
     container_name: redis
